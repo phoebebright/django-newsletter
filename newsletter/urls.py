@@ -8,6 +8,8 @@ from .views import (
     ActionTemplateView, UpdateSubscriptionView,
 )
 
+app_name = 'newsletter' 
+
 register_converter(NewsletterActionsConverter, 'actions')
 
 urlpatterns = [
