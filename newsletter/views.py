@@ -30,7 +30,7 @@ from django.urls import reverse
 
 from django.forms.models import modelformset_factory
 
-from .models import Newsletter, Subscription, Submission
+from .abstract_models import get_newsletter_model, get_subscription_model, get_submission_model
 from .forms import (
     SubscribeRequestForm, UserUpdateForm, UpdateRequestForm,
     UnsubscribeRequestForm, UpdateForm
@@ -38,6 +38,9 @@ from .forms import (
 from .settings import newsletter_settings
 from .utils import ACTIONS
 
+Newsletter = get_newsletter_model()
+Subscription = get_subscription_model()
+Submission = get_submission_model()
 
 logger = logging.getLogger(__name__)
 
