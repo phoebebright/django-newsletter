@@ -2,6 +2,9 @@ import logging
 
 from django.urls import path
 
+from .abstract_models import get_newsletter_model, get_subscription_model, get_attachment_model, get_article_model, \
+    get_message_model, get_submission_model
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -41,9 +44,13 @@ try:
 except (ImportError, RuntimeError):
     pass
 
-from .models import (
-    Newsletter, Subscription, Attachment, Article, Message, Submission
-)
+Newsletter = get_newsletter_model()
+Subscription = get_subscription_model()
+Attachment = get_attachment_model()
+Article = get_article_model()
+Message = get_message_model()
+Submission = get_submission_model()
+
 
 from django.utils.timezone import now
 from django.urls import reverse

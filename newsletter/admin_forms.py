@@ -6,8 +6,14 @@ from django.contrib.admin import widgets, options
 
 from django.utils.translation import gettext as _
 
-from .models import Subscription, Newsletter, Submission
 from .addressimport.parsers import parse_csv, parse_vcard, parse_ldif
+
+from .abstract_models import get_newsletter_model, get_submission_model, get_subscription_model
+
+Submission = get_submission_model()
+Subscription = get_subscription_model()
+Newsletter = get_newsletter_model()
+
 
 
 logger = logging.getLogger(__name__)

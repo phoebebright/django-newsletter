@@ -8,7 +8,7 @@ from django.contrib.sites.models import Site
 
 
 from .abstract_models import AbstractNewsletter, AbstractSubscription, AbstractArticle, AbstractAttachment, \
-    AbstractSubmission, AbstractMessage
+    AbstractSubmission, AbstractMessage, get_newsletter_model
 
 logger = logging.getLogger('django')
 
@@ -56,3 +56,18 @@ class Submission(AbstractSubmission):
    class Meta(AbstractSubmission.Meta):
         swappable = "NEWSLETTER_SUBMISSION_MODEL"
         db_table  = "newsletter_submission"
+
+
+# used in migrations as well as models
+
+def get_default_newsletter():
+    Newsletter = get_newsletter_model()
+    return Newsletter.get_default()
+
+def attachment_upload_to(instance, filename):
+    return os.path.join(
+        'newsletter', 'attachments',
+        datetime.utcnow().strftime('%Y-%m-%d'),
+        str(instance.message.id),
+        filename
+    )

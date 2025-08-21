@@ -2,9 +2,10 @@ from django import forms
 from django.forms.utils import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .models import Subscription
+from .abstract_models import get_subscription_model
 from .validators import validate_email_nouser
 
+Subscription = get_subscription_model()
 
 class NewsletterForm(forms.ModelForm):
     """ This is the base class for all forms managing subscriptions. """

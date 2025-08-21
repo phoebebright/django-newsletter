@@ -36,7 +36,7 @@ def get_message_model():
 def get_subscription_model():
     return apps.get_model(newsletter_settings.SUBSCRIPTION_MODEL, require_ready=False)
 
-def get_attachement_model():
+def get_attachment_model():
     return apps.get_model(newsletter_settings.ATTACHMENT_MODEL, require_ready=False)
 
 def get_article_model():
@@ -44,6 +44,25 @@ def get_article_model():
 
 def get_submission_model():
     return apps.get_model(newsletter_settings.SUBMISSION_MODEL, require_ready=False)
+
+
+def get_default_newsletter():
+    Newsletter = get_newsletter_model()
+    return Newsletter.get_default()
+
+def attachment_upload_to(instance, filename):
+    return os.path.join(
+        'newsletter', 'attachments',
+        datetime.utcnow().strftime('%Y-%m-%d'),
+        str(instance.message.id),
+        filename
+    )
+
+def get_address(name, email):
+    if name:
+        return f'{name} <{email}>'
+    else:
+        return '%s' % email
 
 class AbstractNewsletter(models.Model):
 
@@ -496,15 +515,6 @@ class AbstractArticle(models.Model):
         super().save()
 
 
-def attachment_upload_to(instance, filename):
-    return os.path.join(
-        'newsletter', 'attachments',
-        datetime.utcnow().strftime('%Y-%m-%d'),
-        str(instance.message.id),
-        filename
-    )
-
-
 class AbstractAttachment(models.Model):
     """ Attachment for a Message. """
 
@@ -534,9 +544,6 @@ class AbstractAttachment(models.Model):
         return os.path.split(self.file.name)[1]
 
 
-def get_default_newsletter():
-    Newsletter = get_newsletter_model()
-    return Newsletter.get_default()
 
 
 class AbstractMessage(models.Model):
@@ -823,10 +830,3 @@ class AbstractSubmission(models.Model):
         except AttributeError:  # Django < 1.10
             submission.subscriptions = message.newsletter.get_subscriptions()
         return submission
-
-
-def get_address(name, email):
-    if name:
-        return f'{name} <{email}>'
-    else:
-        return '%s' % email
