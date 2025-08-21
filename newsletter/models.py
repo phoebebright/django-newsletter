@@ -8,8 +8,7 @@ from django.contrib.sites.models import Site
 
 
 from .abstract_models import AbstractNewsletter, AbstractSubscription, AbstractArticle, AbstractAttachment, \
-    AbstractSubmission
-
+    AbstractSubmission, AbstractMessage
 
 logger = logging.getLogger('django')
 
@@ -44,9 +43,9 @@ class Attachment(AbstractAttachment):
         db_table  = "newsletter_attachment"
 
 
-class Message(AbstractArticle):
+class Message(AbstractMessage):
 
-    class Meta(AbstractArticle.Meta):
+    class Meta(AbstractMessage.Meta):
         swappable = "NEWSLETTER_MESSAGE_MODEL"
         db_table  = "newsletter_message"
 
