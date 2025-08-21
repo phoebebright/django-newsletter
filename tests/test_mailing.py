@@ -10,9 +10,16 @@ from django.core import mail
 
 from django.utils.timezone import now
 
-from newsletter.models import (
-    Newsletter, Subscription, Submission, Message, Article, get_default_sites, Attachment
-)
+from newsletter.abstract_models import get_newsletter_model, get_subscription_model, get_submission_model, \
+    get_attachment_model, get_article_model, get_message_model
+
+Newsletter = get_newsletter_model()
+Subscription = get_subscription_model()
+Attachment = get_attachment_model()
+Article = get_article_model()
+Message = get_message_model()
+Submission = get_submission_model()
+
 from newsletter.utils import ACTIONS
 
 from .utils import MailTestCase, UserTestCase, template_exists

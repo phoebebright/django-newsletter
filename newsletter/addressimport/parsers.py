@@ -1,4 +1,7 @@
 import logging
+
+from newsletter.abstract_models import get_subscription_model
+
 logger = logging.getLogger(__name__)
 
 import io
@@ -8,7 +11,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext as _
 
-from newsletter.models import Subscription
+
+Subscription = get_subscription_model()
+
+
 
 
 class AddressList:
