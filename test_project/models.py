@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 
 
-from .abstract_models import AbstractNewsletter, AbstractSubscription, AbstractArticle, AbstractAttachment, \
+from newsletter.abstract_models import AbstractNewsletter, AbstractSubscription, AbstractArticle, AbstractAttachment, \
     AbstractSubmission, AbstractMessage, get_newsletter_model
 
 logger = logging.getLogger('django')
