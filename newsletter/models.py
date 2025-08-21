@@ -17,41 +17,43 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
 class Newsletter(AbstractNewsletter):
-    pass
+
+    class Meta(AbstractNewsletter.Meta):
+        swappable = "NEWSLETTER_NEWSLETTER_MODEL"
+        db_table  = "newsletter_newsletter"
+
 
 class Subscription(AbstractSubscription):
-    pass
+
+    class Meta(AbstractSubscription.Meta):
+        swappable = "NEWSLETTER_SUBSCRIPTION_MODEL"
+        db_table  = "newsletter_subscription"
 
 
 class Article(AbstractArticle):
-    pass
 
-
-def attachment_upload_to(instance, filename):
-    return os.path.join(
-        'newsletter', 'attachments',
-        datetime.utcnow().strftime('%Y-%m-%d'),
-        str(instance.message.id),
-        filename
-    )
+    class Meta(AbstractArticle.Meta):
+        swappable = "NEWSLETTER_ARTICLE_MODEL"
+        db_table  = "newsletter_article"
 
 
 class Attachment(AbstractAttachment):
-    pass
 
-
-def get_default_newsletter():
-    return Newsletter.get_default()
+    class Meta(AbstractAttachment.Meta):
+        swappable = "NEWSLETTER_ATTACHMENT_MODEL"
+        db_table  = "newsletter_attachment"
 
 
 class Message(AbstractArticle):
-    pass
+
+    class Meta(AbstractArticle.Meta):
+        swappable = "NEWSLETTER_MESSAGE_MODEL"
+        db_table  = "newsletter_message"
+
+
 
 class Submission(AbstractSubmission):
-   pass
 
-def get_address(name, email):
-    if name:
-        return f'{name} <{email}>'
-    else:
-        return '%s' % email
+   class Meta(AbstractSubmission.Meta):
+        swappable = "NEWSLETTER_SUBMISSION_MODEL"
+        db_table  = "newsletter_submission"

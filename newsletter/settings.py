@@ -65,6 +65,13 @@ class NewsletterSettings(Settings):
     """ Django-newsletter specific settings. """
     settings_prefix = 'NEWSLETTER'
 
+    DEFAULT_NEWSLETTER_MODEL   = "newsletter.Newsletter"
+    DEFAULT_MESSAGE_MODEL      = "newsletter.Message"
+    DEFAULT_SUBSCRIPTION_MODEL = "newsletter.Subscription"
+    DEFAULT_SUBMISSION_MODEL   = "newsletter.Submission"
+    DEFAULT_ARTICLE_MODEL      = "newsletter.Article"
+    DEFAULT_ATTACHMENT_MODEL   = "newsletter.Attachment"
+
     DEFAULT_CONFIRM_EMAIL = True
 
     @property

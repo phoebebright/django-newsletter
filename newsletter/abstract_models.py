@@ -20,28 +20,30 @@ from .fields import DynamicImageField
 from .utils import (
     make_activation_code, get_default_sites, ACTIONS
 )
+from .settings import newsletter_settings
+
 
 logger = logging.getLogger('django')
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 def get_newsletter_model():
-    return apps.get_model(settings.NEWSLETTER_NEWSLETTER_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.NEWSLETTER_MODEL, require_ready=False)
 
 def get_message_model():
-    return apps.get_model(settings.NEWSLETTER_MESSAGE_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.MESSAGE_MODEL, require_ready=False)
 
 def get_subscription_model():
-    return apps.get_model(settings.NEWSLETTER_SUBSCRIPTION_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.SUBSCRIPTION_MODEL, require_ready=False)
 
 def get_attachement_model():
-    return apps.get_model(settings.NEWSLETTER_ATTACHMENT_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.ATTACHMENT_MODEL, require_ready=False)
 
 def get_article_model():
-    return apps.get_model(settings.NEWSLETTER_ARTICLE_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.ARTICLE_MODEL, require_ready=False)
 
 def get_submission_model():
-    return apps.get_model(settings.NEWSLETTER_SUBMISSION_MODEL, require_ready=False)
+    return apps.get_model(newsletter_settings.SUBMISSION_MODEL, require_ready=False)
 
 class AbstractNewsletter(models.Model):
 
@@ -192,7 +194,7 @@ class AbstractSubscription(models.Model):
     ip = models.GenericIPAddressField(_("IP address"), blank=True, null=True)
 
     newsletter = models.ForeignKey(
-        Newsletter, verbose_name=_('newsletter'), on_delete=models.CASCADE
+        newsletter_settings.NEWSLETTER_MODEL, verbose_name=_('newsletter'), on_delete=models.CASCADE
     )
 
     create_date = models.DateTimeField(editable=False, default=now)
@@ -471,7 +473,7 @@ class AbstractArticle(models.Model):
     # Message this article is associated with
     # TODO: Refactor post to message (post is legacy notation).
     post = models.ForeignKey(
-        'Message', verbose_name=_('message'), related_name='articles',
+        newsletter_settings.MESSAGE_MODEL, verbose_name=_('message'), related_name='articles',
         on_delete=models.CASCADE
     )
 
@@ -513,7 +515,7 @@ class AbstractAttachment(models.Model):
     )
 
     message = models.ForeignKey(
-        settings.NEWSLETTER_MESSAGE_MODEL, verbose_name=_('message'), on_delete=models.CASCADE, related_name='attachments',
+        newsletter_settings.MESSAGE_MODEL, verbose_name=_('message'), on_delete=models.CASCADE, related_name='attachments',
     )
 
     class Meta:
@@ -551,7 +553,7 @@ class AbstractMessage(models.Model):
     slug = models.SlugField(verbose_name=_('slug'))
 
     newsletter = models.ForeignKey(
-        settings.NEWSLETTER_NEWSLETTER_MODEL, verbose_name=_('newsletter'), on_delete=models.CASCADE, default=get_default_newsletter
+        newsletter_settings.NEWSLETTER_MODEL, verbose_name=_('newsletter'), on_delete=models.CASCADE, default=get_default_newsletter
     )
 
     date_create = models.DateTimeField(
@@ -638,11 +640,11 @@ class AbstractSubmission(models.Model):
         return self._Attachement
 
     newsletter = models.ForeignKey(
-        settings.NEWSLETTER_NEWSLETTER_MODEL, verbose_name=_('newsletter'), editable=False,
+        newsletter_settings.NEWSLETTER_MODEL, verbose_name=_('newsletter'), editable=False,
         on_delete=models.CASCADE
     )
     message = models.ForeignKey(
-        settings.NEWSLETTER_MESSAGE_MODEL, verbose_name=_('message'), editable=True, null=False,
+        newsletter_settings.MESSAGE_MODEL, verbose_name=_('message'), editable=True, null=False,
         on_delete=models.CASCADE
     )
 
