@@ -152,19 +152,19 @@ class AbstractNewsletter(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('newsletter_detail', kwargs={'newsletter_slug': self.slug})
+        return reverse('newsletter:newsletter_detail', kwargs={'newsletter_slug': self.slug})
 
     def subscribe_url(self):
-        return reverse('newsletter_subscribe_request', kwargs={'newsletter_slug': self.slug})
+        return reverse('newsletter:newsletter_subscribe_request', kwargs={'newsletter_slug': self.slug})
 
     def unsubscribe_url(self):
-        return reverse('newsletter_unsubscribe_request', kwargs={'newsletter_slug': self.slug})
+        return reverse('newsletter:newsletter_unsubscribe_request', kwargs={'newsletter_slug': self.slug})
 
     def update_url(self):
-        return reverse('newsletter_update_request', kwargs={'newsletter_slug': self.slug})
+        return reverse('newsletter:newsletter_update_request', kwargs={'newsletter_slug': self.slug})
 
     def archive_url(self):
-        return reverse('newsletter_archive', kwargs={'newsletter_slug': self.slug})
+        return reverse('newsletter:newsletter_archive', kwargs={'newsletter_slug': self.slug})
 
     def get_sender(self):
         return get_address(self.sender, self.email)
@@ -385,6 +385,7 @@ class AbstractSubscription(models.Model):
         self.subscribe_date = now()
         self.subscribed = True
         self.unsubscribed = False
+        self.unsubscribe_date = None
 
     def _unsubscribe(self):
         """
@@ -643,7 +644,7 @@ class AbstractSubmission(models.Model):
     @property
     def Attachement(self):
         if not self._Attachement:
-            self._Attachement = get_attachement_model()
+            self._Attachement = get_attachment_model()
         return self._Attachement
 
     newsletter = models.ForeignKey(
@@ -717,6 +718,17 @@ class AbstractSubmission(models.Model):
                 'slug': self.message.slug
             }
         )
+
+    @property
+    def status(self):
+        if self.sending:
+            return _('sending')
+        elif self.sent:
+            return _('sent')
+        elif self.prepared:
+            return _('prepared')
+        else:
+            return _('pending')
 
     @cached_property
     def extra_headers(self):

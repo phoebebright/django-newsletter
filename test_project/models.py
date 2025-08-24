@@ -53,6 +53,7 @@ class Message(AbstractMessage):
 
 class Submission(AbstractSubmission):
 
+
    class Meta(AbstractSubmission.Meta):
         swappable = "NEWSLETTER_SUBMISSION_MODEL"
         db_table  = "newsletter_submission"

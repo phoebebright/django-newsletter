@@ -6,15 +6,16 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 
-from newsletter.models import Submission
+from newsletter.abstract_models import get_submission_model
 
+Submission = get_submission_model()
 
 class Command(BaseCommand):
     help = _("Submit pending messages.")
 
     def handle(self, *args, **options):
         # Setup logging based on verbosity: 1 -> INFO, >1 -> DEBUG
-        verbosity = int(options['verbosity'])
+        verbosity = int(options.get('verbosity', 1))
         logger = logging.getLogger('newsletter')
         if verbosity == 0:
             logger.setLevel(logging.WARN)
