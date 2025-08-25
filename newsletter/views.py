@@ -46,7 +46,7 @@ Submission = get_submission_model()
 
 logger = logging.getLogger(__name__)
 
-NEWSLETTER_BASENAME = settings.get('NEWSLETTER_BASENAME','')
+NEWSLETTER_BASENAME = getattr(settings, 'NEWSLETTER_BASENAME','')
 
 def is_authenticated(user):
     # Compat method for Django < 1.10

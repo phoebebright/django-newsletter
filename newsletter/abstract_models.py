@@ -27,7 +27,7 @@ from .settings import newsletter_settings
 logger = logging.getLogger('django')
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
-NEWSLETTER_BASENAME = settings.get('NEWSLETTER_BASENAME','')
+NEWSLETTER_BASENAME = getattr(settings, 'NEWSLETTER_BASENAME','')
 
 def get_newsletter_model():
     return apps.get_model(newsletter_settings.NEWSLETTER_MODEL, require_ready=False)
