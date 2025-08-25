@@ -640,12 +640,12 @@ class AbstractSubmission(models.Model):
             self._Newsletter = get_newsletter_model()
         return self._Newsletter
 
-    _Attachement = None
+    _Attachment = None
     @property
-    def Attachement(self):
-        if not self._Attachement:
-            self._Attachement = get_attachment_model()
-        return self._Attachement
+    def Attachment(self):
+        if not self._Attachment:
+            self._Attachment = get_attachment_model()
+        return self._Attachment
 
     newsletter = models.ForeignKey(
         newsletter_settings.NEWSLETTER_MODEL, verbose_name=_('newsletter'), editable=False,
@@ -735,7 +735,7 @@ class AbstractSubmission(models.Model):
         return {
             'List-Unsubscribe': 'http://{}{}'.format(
                 Site.objects.get_current().domain,
-                reverse('newsletter_unsubscribe_request',
+                reverse('newsletter:newsletter_unsubscribe_request',
                         args=[self.message.newsletter.slug])
             ),
         }
