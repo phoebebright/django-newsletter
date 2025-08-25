@@ -587,7 +587,12 @@ class AbstractMessage(models.Model):
         verbose_name_plural = _('messages')
         unique_together = ('slug', 'newsletter')
 
+    def save(self, *args, **kwargs):
 
+        # generate slug if not set
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def get_next_article_sortorder(self):
         """ Get next available sortorder for Article. """
