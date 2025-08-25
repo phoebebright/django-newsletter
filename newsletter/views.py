@@ -46,6 +46,7 @@ Submission = get_submission_model()
 
 logger = logging.getLogger(__name__)
 
+NEWSLETTER_BASENAME = settings.get('NEWSLETTER_BASENAME','')
 
 def is_authenticated(user):
     # Compat method for Django < 1.10
@@ -269,7 +270,7 @@ class ActionFormView(NewsletterMixin, ActionMixin, FormView):
         """
 
         return reverse(
-            viewname,
+            f'{NEWSLETTER_BASENAME}{viewname}',
             kwargs={
                 'newsletter_slug': self.newsletter.slug,
                 'action': self.action

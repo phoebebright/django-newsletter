@@ -27,6 +27,7 @@ from .settings import newsletter_settings
 logger = logging.getLogger('django')
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+NEWSLETTER_BASENAME = settings.get('NEWSLETTER_BASENAME','')
 
 def get_newsletter_model():
     return apps.get_model(newsletter_settings.NEWSLETTER_MODEL, require_ready=False)
@@ -153,19 +154,19 @@ class AbstractNewsletter(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('newsletter:newsletter_detail', kwargs={'newsletter_slug': self.slug})
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_detail', kwargs={'newsletter_slug': self.slug})
 
     def subscribe_url(self):
-        return reverse('newsletter:newsletter_subscribe_request', kwargs={'newsletter_slug': self.slug})
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_subscribe_request', kwargs={'newsletter_slug': self.slug})
 
     def unsubscribe_url(self):
-        return reverse('newsletter:newsletter_unsubscribe_request', kwargs={'newsletter_slug': self.slug})
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_unsubscribe_request', kwargs={'newsletter_slug': self.slug})
 
     def update_url(self):
-        return reverse('newsletter:newsletter_update_request', kwargs={'newsletter_slug': self.slug})
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_update_request', kwargs={'newsletter_slug': self.slug})
 
     def archive_url(self):
-        return reverse('newsletter:newsletter_archive', kwargs={'newsletter_slug': self.slug})
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_archive', kwargs={'newsletter_slug': self.slug})
 
     def get_sender(self):
         return get_address(self.sender, self.email)
@@ -443,7 +444,7 @@ class AbstractSubscription(models.Model):
         )
 
     def subscribe_activate_url(self):
-        return reverse('newsletter_update_activate', kwargs={
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_update_activate', kwargs={
             'newsletter_slug': self.newsletter.slug,
             'email': self.email,
             'action': 'subscribe',
@@ -451,7 +452,7 @@ class AbstractSubscription(models.Model):
         })
 
     def unsubscribe_activate_url(self):
-        return reverse('newsletter_update_activate', kwargs={
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_update_activate', kwargs={
             'newsletter_slug': self.newsletter.slug,
             'email': self.email,
             'action': 'unsubscribe',
@@ -459,7 +460,7 @@ class AbstractSubscription(models.Model):
         })
 
     def update_activate_url(self):
-        return reverse('newsletter_update_activate', kwargs={
+        return reverse(f'{NEWSLETTER_BASENAME}newsletter_update_activate', kwargs={
             'newsletter_slug': self.newsletter.slug,
             'email': self.email,
             'action': 'update',
@@ -716,7 +717,7 @@ class AbstractSubmission(models.Model):
         assert self.message.slug
 
         return reverse(
-            'newsletter_archive_detail', kwargs={
+            f'{NEWSLETTER_BASENAME}newsletter_archive_detail', kwargs={
                 'newsletter_slug': self.newsletter.slug,
                 'year': self.publish_date.year,
                 'month': self.publish_date.month,
@@ -741,7 +742,7 @@ class AbstractSubmission(models.Model):
         return {
             'List-Unsubscribe': 'http://{}{}'.format(
                 Site.objects.get_current().domain,
-                reverse('newsletter:newsletter_unsubscribe_request',
+                reverse(f'{NEWSLETTER_BASENAME}newsletter:newsletter_unsubscribe_request',
                         args=[self.message.newsletter.slug])
             ),
         }
