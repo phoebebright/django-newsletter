@@ -284,9 +284,9 @@ class AbstractSubscription(models.Model):
         # replaced by a method property.
 
         if self.pk:
-            assert (self.Subscription.objects.filter(pk=self.pk).count() == 1)
+            assert (self.__class__.objects.filter(pk=self.pk).count() == 1)
 
-            subscription = self.Subscription.objects.get(pk=self.pk)
+            subscription = self.__class__.objects.get(pk=self.pk)
             old_subscribed = subscription.subscribed
             old_unsubscribed = subscription.unsubscribed
 
